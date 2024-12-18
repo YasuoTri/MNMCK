@@ -61,16 +61,25 @@
 
     // Delete items
     if (isset($_GET['del-id'])) {
-        $id = isset($_GET['del-id']) ? $_GET['del-id'] : '';
-        $sql = "DELETE FROM categories WHERE CategoryID = $id";
+    // Giải mã ID đã mã hóa từ URL
+    $encodedId = $_GET['del-id'];
+    $id = base64_decode($encodedId); // Giải mã ID
 
-        if (Database::NonQuery($sql)) {
-            $message = [
-                'type' => 'success',
-                'text' => 'Xoá thành công',
-            ];
-        }
+    // Tiến hành xóa với ID đã giải mã
+    $sql = "DELETE FROM categories WHERE CategoryID = $id";
+
+    if (Database::NonQuery($sql)) {
+        $message = [
+            'type' => 'success',
+            'text' => 'Xoá thành công',
+        ];
+    }else{
+         $message = [
+            'type' => 'danger',
+            'text' => 'Xoá không thành công',
+        ];
     }
+}
 ?>
 
 <?php require_once '../admin/sidebar.php'?>
@@ -262,7 +271,8 @@ $(document).ready(function() {
 
 function removeRow(id) {
     if (confirm('Bạn có chắc chắn muốn xoá không?')) {
-        window.location = '?del-id=' + id;
+        var encodedId = btoa(id); // Mã hóa ID
+        window.location = '?del-id=' + encodedId;
     }
 }
 </script>

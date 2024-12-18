@@ -77,19 +77,24 @@ class Database
     {
         $connect = self::Connect();
         $stmt = $connect->prepare($query);
+        try {
+            return $stmt->execute();
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
         
-        return $stmt->execute();
         
     }
     public static function IsDuplicateNameCategories($name, $id = null)
-{
-    // Nếu có ID (khi cập nhật), loại trừ ID đó ra khỏi kiểm tra
-    $sql = "SELECT COUNT(*) as count FROM categories WHERE CategoryName = '$name'";
-    if ($id) {
-        $sql .= " AND CategoryID != $id";
-    }
+    {
+        // Nếu có ID (khi cập nhật), loại trừ ID đó ra khỏi kiểm tra
+        $sql = "SELECT COUNT(*) as count FROM categories WHERE CategoryName = '$name'";
+        if ($id) {
+            $sql .= " AND CategoryID != $id";
+        }
 
-    $result = self::GetData($sql, ['row' => 0]);
-    return $result['count'] > 0;
-}
+        $result = self::GetData($sql, ['row' => 0]);
+        return $result['count'] > 0;
+    }
 }
