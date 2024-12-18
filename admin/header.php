@@ -4,14 +4,7 @@ require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/config/Pagination.php';
 require_once dirname(__DIR__) . '/config/Helper.php';?>
 
-<?php
-    // Kiểm tra xem có phải tài khoản quản trị viên không?
-    session_start();
-    if (!isset($_SESSION['Role']) || $_SESSION['Role'] != 1) {
-        header('Location: index.php');
-        exit;
-    }
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
