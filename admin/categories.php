@@ -7,12 +7,19 @@
             $name = isset($_POST['name']) ? $_POST['name'] : '';
 
             if (!empty($name)) {
-                $sql = "INSERT INTO categories VALUES (null, '$name')";
-                if (Database::NonQuery($sql)) {
+                if (Database::IsDuplicateNameCategories($name)) {
                     $message = [
-                        'type' => 'success',
-                        'text' => 'Thêm thành công',
+                        'type' => 'warning',
+                        'text' => 'Tên thể loại đã tồn tại',
                     ];
+                } else {
+                    $sql = "INSERT INTO categories VALUES (null, '$name')";
+                    if (Database::NonQuery($sql)) {
+                        $message = [
+                            'type' => 'success',
+                            'text' => 'Thêm thành công',
+                        ];
+                    }
                 }
             } else {
                 $message = [
@@ -28,13 +35,19 @@
             $name = isset($_POST['name']) ? $_POST['name'] : '';
 
             if (!empty($name)) {
-                $sql = "UPDATE categories SET CategoryName = '$name' WHERE CategoryID = $id";
-
-                if (Database::NonQuery($sql)) {
+                if (Database::IsDuplicateNameCategories($name, $id)) {
                     $message = [
-                        'type' => 'success',
-                        'text' => 'Cập nhật thành công',
+                        'type' => 'warning',
+                        'text' => 'Tên thể loại đã tồn tại',
                     ];
+                } else {
+                    $sql = "UPDATE categories SET CategoryName = '$name' WHERE CategoryID = $id";
+                    if (Database::NonQuery($sql)) {
+                        $message = [
+                            'type' => 'success',
+                            'text' => 'Cập nhật thành công',
+                        ];
+                    }
                 }
             } else {
                 $message = [
@@ -42,6 +55,7 @@
                     'text' => 'Tên thể loại không được trống',
                 ];
             }
+
         }
     }
 
