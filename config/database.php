@@ -109,17 +109,19 @@ class Database
         $result = self::GetData($sql, ['row' => 0]);
         return $result['count'] > 0;
     }
-    public static function IsDuplicatePublisherName($name, $id = null)
-{
-    // Truy vấn để kiểm tra trùng tên
-    $sql = "SELECT COUNT(*) as count FROM publishes WHERE PublishName = '$name'";
+    public static function IsDuplicatePublisherInfo($phone, $address, $id = null)
+    {
+        // Truy vấn để kiểm tra trùng địa chỉ và số điện thoại
+        $sql = "SELECT COUNT(*) as count FROM publishes WHERE Phone = '$phone' or Address = '$address'";
 
-    if ($id) {
-        $sql .= " AND PublishID != $id";
+        // Nếu có ID (trong trường hợp sửa), loại trừ bản ghi có ID đó
+        if ($id) {
+            $sql .= " AND PublishID != $id";
+        }
+
+        $result = self::GetData($sql, ['row' => 0]);
+        return $result['count'] > 0;
     }
 
-    $result = self::GetData($sql, ['row' => 0]);
-    return $result['count'] > 0;
-}
 
 }

@@ -1,19 +1,18 @@
 <?php require_once "../admin/header.php"?>
 <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Add items
         if (isset($_POST['action']) && $_POST['action'] == 'add') {
             $name = isset($_POST['name']) ? $_POST['name'] : '';
             $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
             $address = isset($_POST['address']) ? $_POST['address'] : '';
             $fax = isset($_POST['fax']) ? $_POST['fax'] : '';
 
-            if (!empty($name) && !empty($phone)) {
-                // Kiểm tra trùng tên nhà xuất bản
-                if (Database::IsDuplicatePublisherName($name)) {
+            if (!empty($phone) && !empty($address)) {
+                // Kiểm tra trùng địa chỉ và số điện thoại
+                if (Database::IsDuplicatePublisherInfo($phone, $address)) {
                     $message = [
                         'type' => 'warning',
-                        'text' => 'Tên nhà xuất bản đã tồn tại',
+                        'text' => $name .' có địa chỉ hoặc số điện thoại đã tồn tại',
                     ];
                 } else {
                     $sql = "INSERT INTO publishes VALUES (null, '$name', '$phone', '$address', '$fax')";
@@ -30,18 +29,16 @@
                     'text' => [],
                 ];
 
-                if (empty($name)) {
-                    $message['text'][] = 'Tên nhà xuất bản không được trống';
-                }
-
                 if (empty($phone)) {
                     $message['text'][] = 'Số điện thoại không được trống';
                 }
-            }
 
+                if (empty($address)) {
+                    $message['text'][] = 'Địa chỉ không được trống';
+                }
+            }
         }
 
-        // Edit items
         if (isset($_POST['action']) && $_POST['action'] == 'edit') {
             $id = isset($_GET['edit-id']) ? $_GET['edit-id'] : '';
             $name = isset($_POST['name']) ? $_POST['name'] : '';
@@ -49,12 +46,12 @@
             $address = isset($_POST['address']) ? $_POST['address'] : '';
             $fax = isset($_POST['fax']) ? $_POST['fax'] : '';
 
-            if (!empty($name) && !empty($phone)) {
-                // Kiểm tra trùng tên nhà xuất bản
-                if (Database::IsDuplicatePublisherName($name, $id)) {
+            if (!empty($phone) && !empty($address)) {
+                // Kiểm tra trùng địa chỉ và số điện thoại
+                if (Database::IsDuplicatePublisherInfo($phone, $address, $id)) {
                     $message = [
                         'type' => 'warning',
-                        'text' => 'Tên nhà xuất bản đã tồn tại',
+                        'text' => $name .' có địa chỉ hoặc số điện thoại đã tồn tại',
                     ];
                 } else {
                     // Cập nhật thông tin nhà xuất bản
@@ -73,12 +70,12 @@
                     'text' => [],
                 ];
 
-                if (empty($name)) {
-                    $message['text'][] = 'Tên nhà xuất bản không được trống';
-                }
-
                 if (empty($phone)) {
                     $message['text'][] = 'Số điện thoại không được trống';
+                }
+
+                if (empty($address)) {
+                    $message['text'][] = 'Địa chỉ không được trống';
                 }
             }
         }
