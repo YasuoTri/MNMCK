@@ -97,4 +97,16 @@ class Database
         $result = self::GetData($sql, ['row' => 0]);
         return $result['count'] > 0;
     }
+    
+    public static function IsDuplicateAuthorName($name, $id = null)
+    {
+        // Nếu có ID (khi cập nhật), loại trừ ID đó ra khỏi kiểm tra
+        $sql = "SELECT COUNT(*) as count FROM authors WHERE AuthorName = '$name'";
+        if ($id) {
+            $sql .= " AND AuthorID != $id";
+        }
+
+        $result = self::GetData($sql, ['row' => 0]);
+        return $result['count'] > 0;
+    }
 }
