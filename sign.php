@@ -39,19 +39,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Đăng ký
     if (isset($_POST['SignUp'])) {
-        $username = $_POST['username'];
-        $password1 = $_POST['password1'];
-        $password2 = $_POST['password2'];
-        $email = $_POST['email'];
-
-        if ($password1 == $password2) {
-            // Thêm lỗ hổng SQL Injection
+        $username = isset($_POST['username']) ? $_POST['username'] : '';
+        $password1 = isset($_POST['password1']) ? $_POST['password1'] : '';
+        $password2 = isset($_POST['password2']) ? $_POST['password2'] : '';
+        $email = isset($_POST['email']) ? $_POST['email'] : '';
+    
+        // Kiểm tra tên đăng nhập chỉ chứa chữ và số
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+            $message = "<p style='color: #dc3545'>Tên đăng nhập chỉ được chứa chữ và số!</p>";
+        } else if ($password1 == $password2) {
             $sql = "INSERT INTO users VALUES ('$username', sha1('$password1'), '', '', '$email', '', 0, 1, NOW(3), 3)";
-            $check = Database::NonQuery($sql); // Không kiểm tra dữ liệu trước khi thực thi
-
+            $check = Database::NonQuery($sql);
             if ($check) {
-                // Thêm lỗ hổng XSS
-                $message = "<p style='color: #0d6efd'>" . ($_GET['success'] ?? "Đăng ký thành công") . "</p>";
+                $message = "<p style='color: #0d6efd'>Đăng ký thành công</p>";
             } else {
                 $message = "<p style='color: #dc3545'>Đăng ký thất bại</p>";
             }
