@@ -6,7 +6,16 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <?php $avatar = empty($_SESSION['Avatar']) ? '/assets/img/user.png' : $_SESSION['Avatar'];?>
+                <img src="..<?=$avatar?>" class="img-circle elevation-2" alt="User image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block"><?=$_SESSION['DisplayName']?></a>
+            </div>
+        </div>
+            
 
         <!-- SidebarSearch Form -->
         <div class="form-inline">
