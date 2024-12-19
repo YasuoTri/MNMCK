@@ -109,4 +109,17 @@ class Database
         $result = self::GetData($sql, ['row' => 0]);
         return $result['count'] > 0;
     }
+    public static function IsDuplicatePublisherName($name, $id = null)
+{
+    // Truy vấn để kiểm tra trùng tên
+    $sql = "SELECT COUNT(*) as count FROM publishes WHERE PublishName = '$name'";
+
+    if ($id) {
+        $sql .= " AND PublishID != $id";
+    }
+
+    $result = self::GetData($sql, ['row' => 0]);
+    return $result['count'] > 0;
+}
+
 }
