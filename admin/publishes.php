@@ -1,18 +1,25 @@
 <?php require_once "../admin/header.php"?>
 <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Add items
         if (isset($_POST['action']) && $_POST['action'] == 'add') {
             $name = isset($_POST['name']) ? $_POST['name'] : '';
             $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
             $address = isset($_POST['address']) ? $_POST['address'] : '';
             $fax = isset($_POST['fax']) ? $_POST['fax'] : '';
 
-            if (!empty($phone) && !empty($address)) {
-                // Kiểm tra trùng địa chỉ và số điện thoại
+            // Kiểm tra số điện thoại có 10 chữ số và bắt đầu bằng 0
+            if (!preg_match("/^0\d{9}$/", $phone)) {
+                $message = [
+                    'type' => 'warning',
+                    'text' => 'Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số',
+                ];
+            } elseif (!empty($phone) && !empty($address)) {
+                // Kiểm tra trùng địa chỉ và số điện thoại cho nhà xuất bản
                 if (Database::IsDuplicatePublisherInfo($phone, $address)) {
                     $message = [
                         'type' => 'warning',
-                        'text' => $name .' có địa chỉ hoặc số điện thoại đã tồn tại',
+                        'text' => 'Số điện thoại và địa chỉ đã tồn tại cho một nhà xuất bản khác',
                     ];
                 } else {
                     $sql = "INSERT INTO publishes VALUES (null, '$name', '$phone', '$address', '$fax')";
@@ -39,6 +46,7 @@
             }
         }
 
+        // Edit items
         if (isset($_POST['action']) && $_POST['action'] == 'edit') {
             $id = isset($_GET['edit-id']) ? $_GET['edit-id'] : '';
             $name = isset($_POST['name']) ? $_POST['name'] : '';
@@ -46,12 +54,18 @@
             $address = isset($_POST['address']) ? $_POST['address'] : '';
             $fax = isset($_POST['fax']) ? $_POST['fax'] : '';
 
-            if (!empty($phone) && !empty($address)) {
-                // Kiểm tra trùng địa chỉ và số điện thoại
+            // Kiểm tra số điện thoại có 10 chữ số và bắt đầu bằng 0
+            if (!preg_match("/^0\d{9}$/", $phone)) {
+                $message = [
+                    'type' => 'warning',
+                    'text' => 'Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số',
+                ];
+            } elseif (!empty($phone) && !empty($address)) {
+                // Kiểm tra trùng địa chỉ và số điện thoại cho nhà xuất bản khác
                 if (Database::IsDuplicatePublisherInfo($phone, $address, $id)) {
                     $message = [
                         'type' => 'warning',
-                        'text' => $name .' có địa chỉ hoặc số điện thoại đã tồn tại',
+                        'text' => 'Số điện thoại và địa chỉ đã tồn tại cho một nhà xuất bản khác',
                     ];
                 } else {
                     // Cập nhật thông tin nhà xuất bản
