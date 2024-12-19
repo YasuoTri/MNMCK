@@ -109,4 +109,19 @@ class Database
         $result = self::GetData($sql, ['row' => 0]);
         return $result['count'] > 0;
     }
+    public static function IsDuplicatePublisherInfo($phone, $address, $id = null)
+{
+    // Truy vấn để kiểm tra trùng địa chỉ và số điện thoại cho nhà xuất bản khác
+    $sql = "SELECT COUNT(*) as count FROM publishes WHERE Phone = '$phone' AND Address = '$address'";
+
+    // Nếu có ID (trong trường hợp sửa), loại trừ bản ghi có ID đó
+    if ($id) {
+        $sql .= " AND PublishID != $id";
+    }
+
+    $result = self::GetData($sql, ['row' => 0]);
+    return $result['count'] > 0;
+}
+
+
 }
