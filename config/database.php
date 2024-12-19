@@ -143,4 +143,15 @@ class Database
         $result = self::GetData($sql, ['row' => 0]);
         return $result['count'] > 0;
     }
+
+    public static function IsDuplicateSliderName($name, $id = null)
+    {
+        $sql = "SELECT COUNT(*) as count FROM sliders WHERE SliderName = '$name'";
+        if ($id) {
+            $sql .= " AND SliderID != '$id'";
+        }
+
+        $result = self::GetData($sql, ['row' => 0]);
+        return $result['count'] > 0;
+    }
 }
