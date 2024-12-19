@@ -64,7 +64,8 @@
 
     // Delete items
     if (isset($_GET['del-id'])) {
-        $id = isset($_GET['del-id']) ? $_GET['del-id'] : '';
+        $encodedId = $_GET['del-id'];
+        $id = base64_decode($encodedId);
         $sql = "DELETE FROM authors WHERE AuthorID = $id";
 
         if (Database::NonQuery($sql)) {
@@ -109,7 +110,7 @@
         <!-- Modal: Add -->
         <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
-                <form class="modal-content" method="POST">
+                <form class="modal-content" method="POST" action="./authors.php">
                     <div class="modal-header bg-primary">
                         <h5 class="modal-title">Thêm tác giả</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
