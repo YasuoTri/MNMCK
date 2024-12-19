@@ -133,4 +133,14 @@ class Database
         return $result['count'] > 0;
     }
 
+    public static function IsDuplicateSupplierName($name, $id = null)
+    {
+        $sql = "SELECT COUNT(*) as count FROM suppliers WHERE SupplierName = '$name'";
+        if ($id) {
+            $sql .= " AND SupplierID != '$id'";
+        }
+
+        $result = self::GetData($sql, ['row' => 0]);
+        return $result['count'] > 0;
+    }
 }
