@@ -48,6 +48,9 @@ if (isset($_POST['update_amount'])) {
         // Nếu số lượng yêu cầu không vượt quá hàng trong kho, thực hiện cập nhật
         $sql = "UPDATE carts SET Amount = $amount WHERE ISBN = '$isbn' AND Username = '" . $_SESSION['Username'] . "'";
         Database::NonQuery($sql);
+    } else {
+        // Thông báo nếu số lượng yêu cầu vượt quá hàng trong kho
+        echo "<script>alert('Số lượng yêu cầu vượt quá số lượng trong kho! Vui lòng nhập số lượng nhỏ hơn.');</script>";
     }
 }
 
@@ -256,11 +259,10 @@ if (isset($_SESSION['applied_voucher']) && $_SESSION['applied_voucher']) {
                                 </tr>
                                 <tr class="order-total">
                                     <th>Tổng tiền: </th>
-                                    <td class="text-right p-4 font-semibold"><strong><span
-                                                class="amount"><?php if (isset($_SESSION['applied_voucher'])) $tamp3 =  $_SESSION['discounted_total'] + 15000;
-                                                                else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
-                                                                else $tamp3 = 0;
-                                                                echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
+                                    <td class="text-right p-4 font-semibold"><strong><span class="amount"><?php if (isset($_SESSION['applied_voucher'])) $tamp3 =  $_SESSION['discounted_total'] + 15000;
+                                                                                                            else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
+                                                                                                            else $tamp3 = 0;
+                                                                                                            echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
 
                                             </span></strong>
                                     </td>
@@ -281,11 +283,10 @@ if (isset($_SESSION['applied_voucher']) && $_SESSION['applied_voucher']) {
                                 <?php } ?>
                                 <tr>
                                     <th class="text-sm text-left text-gray-400 p-4">Total</th>
-                                    <td class="text-right p-4 font-semibold"><strong><span
-                                                class="amount"><?php if (isset($_SESSION['applied_voucher'])) $tamp3 =  $_SESSION['discounted_total'] + 15000;
-                                                                else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
-                                                                else $tamp3 = 0;
-                                                                echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
+                                    <td class="text-right p-4 font-semibold"><strong><span class="amount"><?php if (isset($_SESSION['applied_voucher'])) $tamp3 =  $_SESSION['discounted_total'] + 15000;
+                                                                                                            else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
+                                                                                                            else $tamp3 = 0;
+                                                                                                            echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
 
                                             </span></strong>
                                     </td>
