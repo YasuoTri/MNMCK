@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  php-apache:
+    container_name: bht-bookstore
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./BHTBookDoAnMNM:/var/www/html/
+    ports:
+      - 8000:80
+    networks:
+      - app-network
+
+  db:
+    container_name: bht-mysql
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bht_bookstore
+      MYSQL_USER: bht
+      MYSQL_PASSWORD: bht123
+    ports:
+      - "8201:3306"
+    volumes:
+      - ./BHTBookDoAnMNM/mysql/bht_bookstore.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  phpmyadmin:
+    container_name: bht-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,9 +1,9 @@
 <?php
 class Database
 {
-    private const HOST = 'localhost';
-    private const USERNAME = 'root';
-    private const PASSWORD = '';
+    private const HOST = 'db';
+    private const USERNAME = 'bht';
+    private const PASSWORD = 'bht123';
     private const DBNAME = 'bht_bookstore';
 
     private static function Connect()
@@ -56,7 +56,7 @@ class Database
      */
     public static function GetDataWithPagination($query, $offset = 10, $page = 1)
     {
-        $countAll = self::GetData('SELECT count(*) FROM categories', ['cell' => 0]);
+        $countAll = (int)self::GetData('SELECT count(*) FROM categories', ['cell' => 0]);
 
         $start = ($page - 1) * $offset;
         $data = self::GetData($query . " LIMIT $start, $offset");
