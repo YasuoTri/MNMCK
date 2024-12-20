@@ -1,3 +1,5 @@
+<?php       session_start();
+ob_start();?>
 <?php include './config/config.php'; ?>
 <?php include './config/database.php'; ?>
 
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             if ($user && sha1($password) === $user['Password']) {
 
-                session_start();
+          
                 $_SESSION['Username'] = $user['Username'];
                 $_SESSION['DisplayName'] = $user['Fullname'] ?: $user['Username'];
                 $_SESSION['Avatar'] = $user['Avatar'] ?: './assets/img/user.png';
