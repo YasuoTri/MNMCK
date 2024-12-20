@@ -17,23 +17,44 @@
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Đăng nhập
     if (isset($_POST['SignIn'])) {
-        // Thêm lỗ hổng SQL Injection (không dùng chuẩn bị câu lệnh)
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $sql = "SELECT * FROM users WHERE (Username = '$username' OR Phone = '$username' OR Email = '$username') AND Password = sha1('$password') AND Status = 1";
-        $users = Database::GetData($sql); // Không kiểm tra dữ liệu đầu vào
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
+    $HOST = 'localhost';
+      $USERNAME = 'root';
+      $PASSWORD = '';
+      $DBNAME = 'bht_bookstore';
 
-        if ($users != null) {
-            session_start();
-            $user = $users[0];
-            $_SESSION['Username'] = $user['Username'];
-            $_SESSION['DisplayName'] = $user['Fullname'] == '' ? $user['Username'] : $user['Fullname'];
-            $_SESSION['Avatar'] = !empty($user['Avatar']) ? $user['Avatar'] : './assets/img/user.png';
-            $_SESSION['Role'] = $user['AccountTypeID'];
-            header('Location: ./index.php');
-        } else {
-            // Thêm lỗ hổng XSS
-            $message = "<p style='color: #dc3545'>" . ($_GET['error'] ?? "Tên đăng nhập hoặc mật khẩu không hợp lệ!") . "</p>";
+
+            $dsn = 'mysql:host=' . $HOST . ';dbname=' . $DBNAME . ';charset=utf8';
+            $connect = new PDO($dsn, $USERNAME, $PASSWORD);
+            $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+       
+    
+
+        try {
+        
+            $sql = "SELECT * FROM users WHERE (Username = :username OR Phone = :username OR Email = :username) AND Status = 1";
+            $stmt = $connect->prepare($sql);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user && sha1($password) === $user['Password']) {
+
+                session_start();
+                $_SESSION['Username'] = $user['Username'];
+                $_SESSION['DisplayName'] = $user['Fullname'] ?: $user['Username'];
+                $_SESSION['Avatar'] = $user['Avatar'] ?: './assets/img/user.png';
+                $_SESSION['Role'] = $user['AccountTypeID'];
+                header('Location: ./index.php');
+                exit();
+            } else {
+                $message = "<p style='color: #dc3545'>Tên đăng nhập hoặc mật khẩu không hợp lệ!</p>";
+            }
+        } catch (PDOException $e) {
+            $message = "<p style='color: #dc3545'>Lỗi hệ thống: " . htmlspecialchars($e->getMessage()) . "</p>";
         }
     }
 
@@ -61,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 
 <body>
     <div class="container">
