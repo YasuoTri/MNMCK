@@ -131,7 +131,6 @@ if (isset($_POST['apply_voucher'])) {
             $PASSWORD = '';
             $DBNAME = 'bht_bookstore';
 
-
             try {
                 $dsn = 'mysql:host=' . $HOST . ';dbname=' . $DBNAME . ';charset=utf8';
                 $connect = new PDO($dsn, $USERNAME, $PASSWORD);
@@ -237,27 +236,27 @@ if (isset($_SESSION['applied_voucher']) && $_SESSION['applied_voucher']) {
 
                                 if ($carts) {
                                     foreach ($carts as $cart) { ?>
-                            <tr class="cart_item">
-                                <td class="product-name"><?= $cart['ISBN'] ?></td>
-                                <td class="product-name"><?= $cart['BookTitle'] ?></td>
-                                <td class="product-thumbnail"><img class="shop_thumbnail"
-                                        src=".<?= $cart['Thumbnail'] ?>"></td>
-                                <td class="product-name"><?= Helper::Currency($cart['Price']) ?></td>
-                                <td class="product-quantity">
-                                    <div class="quantity buttons_added">
-                                        <form method="POST">
-                                            <input name="isbn" value="<?= $cart['ISBN'] ?>" hidden>
-                                            <input name="amount" type="number" size="4" class="input-text qty text"
-                                                min="1" value="<?= $cart['Amount'] ?>">
-                                            <button name="update_amount" class="btn btn-primary"><i
-                                                    class="fas fa-save"></i></button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td class="product-name"><?= Helper::Currency($cart['Price'] * $cart['Amount']) ?></td>
-                                <td class="product-remove"><a title="Xoá sản phẩm" class="remove"
-                                        href="?del-cart-id=<?= $cart['ISBN'] ?>">×</td>
-                            </tr>
+                                        <tr class="cart_item">
+                                            <td class="product-name"><?= $cart['ISBN'] ?></td>
+                                            <td class="product-name"><?= $cart['BookTitle'] ?></td>
+                                            <td class="product-thumbnail"><img class="shop_thumbnail"
+                                                    src=".<?= $cart['Thumbnail'] ?>"></td>
+                                            <td class="product-name"><?= Helper::Currency($cart['Price']) ?></td>
+                                            <td class="product-quantity">
+                                                <div class="quantity buttons_added">
+                                                    <form method="POST">
+                                                        <input name="isbn" value="<?= $cart['ISBN'] ?>" hidden>
+                                                        <input name="amount" type="number" size="4" class="input-text qty text"
+                                                            min="1" value="<?= $cart['Amount'] ?>">
+                                                        <button name="update_amount" class="btn btn-primary"><i
+                                                                class="fas fa-save"></i></button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                            <td class="product-name"><?= Helper::Currency($cart['Price'] * $cart['Amount']) ?></td>
+                                            <td class="product-remove"><a title="Xoá sản phẩm" class="remove"
+                                                    href="?del-cart-id=<?= $cart['ISBN'] ?>">×</td>
+                                        </tr>
                             <?php }
                                 }
                             }
@@ -276,9 +275,9 @@ if (isset($_SESSION['applied_voucher']) && $_SESSION['applied_voucher']) {
                                     <?php
                                     if (isset($_SESSION['VoucherNames'])) {
                                     ?>
-                                    <button name="remove_voucher"
-                                        class="bg-[#212529]  text-[#F9FAFA] rounded-lg w-1/2 px-4 py-2.5">Remove
-                                        Coupon</button>
+                                        <button name="remove_voucher"
+                                            class="bg-[#212529]  text-[#F9FAFA] rounded-lg w-1/2 px-4 py-2.5">Remove
+                                            Coupon</button>
 
                                     <?php };
                                     ?>
@@ -314,9 +313,9 @@ if (isset($_SESSION['applied_voucher']) && $_SESSION['applied_voucher']) {
                                     <th>Tổng tiền: </th>
                                     <td class="text-right p-4 font-semibold"><strong><span
                                                 class="amount"><?php if (isset($_SESSION['applied_voucher'])) $tamp3 =  $_SESSION['discounted_total'] + 15000;
-                                                                                                            else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
-                                                                                                            else $tamp3 = 0;
-                                                                                                            echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
+                                                                else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
+                                                                else $tamp3 = 0;
+                                                                echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
 
                                             </span></strong>
                                     </td>
@@ -324,29 +323,28 @@ if (isset($_SESSION['applied_voucher']) && $_SESSION['applied_voucher']) {
                                 </tr>
                                 <?php if (isset($_SESSION['applied_voucher'])) {
                                 ?>
-                                <tr>
-                                    <th class="text-sm text-left text-gray-400 p-4">Voucher Used</th>
-                                    <td class="text-right p-4 font-semibold"><strong><span class="amount">
-                                                <?php
+                                    <tr>
+                                        <th class="text-sm text-left text-gray-400 p-4">Voucher Used</th>
+                                        <td class="text-right p-4 font-semibold"><strong><span class="amount">
+                                                    <?php
                                                     foreach ($_SESSION['VoucherNames'] as $v) {
                                                         echo $v . "<br>";
                                                     } ?>
-                                            </span></strong>
-                                    </td>
-                                </tr>
+                                                </span></strong>
+                                        </td>
+                                    </tr>
                                 <?php } ?>
                                 <tr>
                                     <th class="text-sm text-left text-gray-400 p-4">Total</th>
                                     <td class="text-right p-4 font-semibold"><strong><span
                                                 class="amount"><?php if (isset($_SESSION['applied_voucher'])) $tamp3 =  $_SESSION['discounted_total'] + 15000;
-                                                                                                            else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
-                                                                                                            else $tamp3 = 0;
-                                                                                                            echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
+                                                                else if (isset($totalMoney)) $tamp3 = $totalMoney + 15000;
+                                                                else $tamp3 = 0;
+                                                                echo number_format($tamp3, 0, ".", ".") . " đ"; ?>
 
                                             </span></strong>
                                     </td>
                                 </tr>
-
                             </tbody>
                         </table>
                     </div>
