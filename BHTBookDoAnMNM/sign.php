@@ -1,3 +1,5 @@
+<?php       session_start();
+ob_start();?>
 <?php include './config/config.php'; ?>
 <?php include './config/database.php'; ?>
 
@@ -19,19 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['SignIn'])) {
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
-    $HOST = 'localhost';
-      $USERNAME = 'root';
-      $PASSWORD = '';
+    $HOST = 'db';
+      $USERNAME = 'bht';
+      $PASSWORD = 'bht123';
       $DBNAME = 'bht_bookstore';
 
 
             $dsn = 'mysql:host=' . $HOST . ';dbname=' . $DBNAME . ';charset=utf8';
             $connect = new PDO($dsn, $USERNAME, $PASSWORD);
             $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-       
-    
-
         try {
         
             $sql = "SELECT * FROM users WHERE (Username = :username OR Phone = :username OR Email = :username) AND Status = 1";
@@ -43,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             if ($user && sha1($password) === $user['Password']) {
 
-                session_start();
+          
                 $_SESSION['Username'] = $user['Username'];
                 $_SESSION['DisplayName'] = $user['Fullname'] ?: $user['Username'];
                 $_SESSION['Avatar'] = $user['Avatar'] ?: './assets/img/user.png';
